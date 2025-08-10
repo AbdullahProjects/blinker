@@ -39,6 +39,7 @@ Blinker.fade(
     color: Colors.grey.shade300,
   ),
 )
+```
 
 ### Cycle Mode
 
@@ -59,6 +60,7 @@ Blinker.cycle(
     color: Colors.grey.shade300,
   ),
 )
+```
 
 
 ## 🚀 Getting Started
