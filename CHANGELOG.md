@@ -1,3 +1,6 @@
-## 0.0.1
+## 1.0.0
 
-* TODO: Describe initial release.
+- Initial release
+- Added fade mode
+- Added color cycle mode
+- Supports all Flutter platforms
