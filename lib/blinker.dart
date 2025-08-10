@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 /// color transitions on any child widget.
 ///
 /// This widget supports two modes:
-/// - **Shimmer mode**: Blinks between a base color and a highlight color.
-/// - **Cycle mode**: Cycles smoothly through a list of colors.
+/// - **Shimmer mode** [Blinker.shimmer]: Blinks between a start color and an end color.
+/// - **Cycle mode** [Blinker.cycle]: Cycles smoothly through a list of colors.
 ///
 /// Works on **all Flutter-supported platforms** (Android, iOS, Web, Windows, macOS, Linux)
 /// because it only uses Flutter's rendering engine.
@@ -15,58 +15,67 @@ import 'package:flutter/material.dart';
 /// - [AnimationController](https://api.flutter.dev/flutter/animation/AnimationController-class.html)
 /// - [ColorTween](https://api.flutter.dev/flutter/animation/ColorTween-class.html)
 class Blinker extends StatefulWidget {
-  /// Creates a shimmer-like effect between a base color and a highlight color.
+  /// Creates a shimmer-like effect between a start color and an end color.
   ///
-  /// The `baseColor` and `highlightColor` must both be provided.
+  /// The `startColor` and `endColor` must both be provided.
   /// This mode is useful for a loading shimmer effect or a blinking text highlight.
   const Blinker.shimmer({
     super.key,
     required this.child,
-    required this.baseColor,
-    required this.highlightColor,
+    required this.startColor,
+    required this.endColor,
     this.duration = const Duration(milliseconds: 800),
+    this.curve = Curves.linear,
     this.times,
-  }) : colors = null,
-       assert(
-         baseColor != null && highlightColor != null,
-         'baseColor and highlightColor must be provided',
-       );
+  })  : colors = null,
+        assert(
+          startColor != null && endColor != null,
+          'startColor and endColor must be provided',
+        );
 
   /// Creates a cycle effect through a list of colors.
   ///
-  /// The `colors` list must have at least **two** colors.
+  /// The [Blinker.colors] list must have at least **two** colors.
   /// The widget will smoothly transition from one color to the next.
   const Blinker.cycle({
     super.key,
     required this.child,
     required this.colors,
     this.duration = const Duration(milliseconds: 800),
+    this.curve = Curves.linear,
     this.times,
-  }) : baseColor = null,
-       highlightColor = null,
-       assert(
-         colors != null && colors.length >= 2,
-         'colors list must contain at least 2 colors',
-       );
+  })  : startColor = null,
+        endColor = null,
+        assert(
+          colors != null && colors.length >= 2,
+          'colors list must contain at least 2 colors',
+        );
 
   /// The widget to which the blinking effect will be applied.
   final Widget child;
 
-  /// Base color for shimmer effect (used in shimmer mode only).
-  final Color? baseColor;
+  /// Start color for shimmer effect (used in shimmer mode only [Blinker.shimmer]).
+  final Color? startColor;
 
-  /// Highlight color for shimmer effect (used in shimmer mode only).
-  final Color? highlightColor;
+  /// End color for shimmer effect (used in shimmer mode only [Blinker.shimmer]).
+  final Color? endColor;
 
-  /// List of colors to cycle through (used in cycle mode only).
+  /// List of colors to cycle through (used in cycle mode only [Blinker.cycle]).
   final List<Color>? colors;
 
   /// Duration of each color transition.
   final Duration duration;
 
+  /// The curve to use for the animation.
+  final Curve curve;
+
   /// Number of times to repeat the full animation cycle.
   ///
   /// If `null`, animation repeats infinitely.
+  ///
+  /// If times is set, the animation will stop after completing the specified number of cycles,
+  /// and final color will be the first color in the [Blinker.cycle],
+  /// and final color will be the start color in shimmer mode [Blinker.shimmer].
   final int? times;
 
   @override
@@ -85,8 +94,8 @@ class BlinkerState extends State<Blinker> with SingleTickerProviderStateMixin {
     super.initState();
 
     // Choose the correct color list based on constructor
-    if (widget.baseColor != null && widget.highlightColor != null) {
-      colors = [widget.baseColor!, widget.highlightColor!];
+    if (widget.startColor != null && widget.endColor != null) {
+      colors = [widget.startColor!, widget.endColor!];
     } else {
       colors = widget.colors!;
     }
@@ -129,16 +138,15 @@ class BlinkerState extends State<Blinker> with SingleTickerProviderStateMixin {
 
   /// Updates the [_colorAnimation] with the current and next color.
   void _updateColorAnimation() {
-    _colorAnimation =
-        ColorTween(
-          begin: colors[_currentColorIndex],
-          end: colors[(_currentColorIndex + 1) % colors.length],
-        ).animate(
-          CurvedAnimation(
-            parent: _controller,
-            curve: Curves.linear, // Smooth linear color change
-          ),
-        );
+    _colorAnimation = ColorTween(
+      begin: colors[_currentColorIndex],
+      end: colors[(_currentColorIndex + 1) % colors.length],
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: widget.curve,
+      ),
+    );
   }
 
   /// Stops the animation when cycles are complete.
@@ -148,7 +156,7 @@ class BlinkerState extends State<Blinker> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    _controller.dispose(); // Always dispose controllers
+    _controller.dispose();
     super.dispose();
   }
 
@@ -165,7 +173,7 @@ class BlinkerState extends State<Blinker> with SingleTickerProviderStateMixin {
               _colorAnimation.value ?? colors.first,
             ],
           ).createShader(bounds),
-          blendMode: BlendMode.srcIn, // Replaces widget's color with gradient
+          blendMode: BlendMode.srcIn,
           child: widget.child,
         );
       },

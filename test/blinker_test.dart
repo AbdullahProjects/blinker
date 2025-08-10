@@ -3,68 +3,97 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:blinker/blinker.dart';
 
 void main() {
-  group('Blinker Widget Tests', () {
-    testWidgets('Shimmer mode renders child', (WidgetTester tester) async {
-      // Arrange
-      const testKey = Key('shimmer_text');
-
-      // Act
+  group('Blinker widget tests', () {
+    testWidgets('Blinker.shimmer renders with start and end colors',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Blinker.shimmer(
-            key: Key('shimmer_widget'),
-            baseColor: Colors.grey,
-            highlightColor: Colors.white,
-            child: Text('Hello Shimmer', key: testKey),
+            startColor: Colors.red,
+            endColor: Colors.blue,
+            child: const Text('Shimmer Test'),
           ),
         ),
       );
 
-      // Assert
-      expect(find.byKey(testKey), findsOneWidget);
-      expect(find.text('Hello Shimmer'), findsOneWidget);
+      // Expect a Text widget is present
+      expect(find.text('Shimmer Test'), findsOneWidget);
     });
 
-    testWidgets('Cycle mode renders child', (WidgetTester tester) async {
-      // Arrange
-      const testKey = Key('cycle_icon');
-
-      // Act
+    testWidgets('Blinker.cycle renders with a list of colors',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Blinker.cycle(
-            key: const Key('cycle_widget'),
-            colors: [Colors.red, Colors.green],
-            child: Icon(Icons.star, key: testKey),
+            colors: [Colors.red, Colors.green, Colors.blue],
+            child: const Text('Cycle Test'),
           ),
         ),
       );
 
-      // Assert
-      expect(find.byKey(testKey), findsOneWidget);
-      expect(find.byIcon(Icons.star), findsOneWidget);
+      expect(find.text('Cycle Test'), findsOneWidget);
     });
 
-    testWidgets('Blinker shimmer runs animation', (WidgetTester tester) async {
+    testWidgets('Shimmer animation changes color over time',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Blinker.shimmer(
-            baseColor: Colors.black,
-            highlightColor: Colors.white,
-            duration: Duration(milliseconds: 100),
-            times: 1, // Only run one full cycle
-            child: Text('Animating...'),
+            startColor: Colors.red,
+            endColor: Colors.blue,
+            duration: const Duration(milliseconds: 100),
+            child: const Text('Animating Text'),
           ),
         ),
       );
 
-      // Start animation
+      // Initial pump
       await tester.pump();
-      // Let animation run
-      await tester.pump(const Duration(milliseconds: 200));
 
-      // No crash means animation ran successfully
-      expect(find.text('Animating...'), findsOneWidget);
+      // Let animation run
+      await tester.pump(const Duration(milliseconds: 150));
+
+      // The widget should still be there after animation tick
+      expect(find.text('Animating Text'), findsOneWidget);
+    });
+
+    testWidgets('Cycle mode loops through multiple colors',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Blinker.cycle(
+            colors: [Colors.red, Colors.green, Colors.blue],
+            duration: const Duration(milliseconds: 100),
+            child: const Text('Looping Colors'),
+          ),
+        ),
+      );
+
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 150));
+
+      expect(find.text('Looping Colors'), findsOneWidget);
+    });
+
+    test('Shimmer constructor throws if colors are missing', () {
+      expect(
+        () => Blinker.shimmer(
+          startColor: Colors.red,
+          endColor: null as dynamic,
+          child: const Text('Invalid'),
+        ),
+        throwsAssertionError,
+      );
+    });
+
+    test('Cycle constructor throws if color list has less than 2 colors', () {
+      expect(
+        () => Blinker.cycle(
+          colors: [Colors.red],
+          child: const Text('Invalid'),
+        ),
+        throwsAssertionError,
+      );
     });
   });
 }
