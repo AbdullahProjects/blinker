@@ -4,20 +4,19 @@ import 'package:blinker/blinker.dart';
 
 void main() {
   group('Blinker widget tests', () {
-    testWidgets('Blinker.shimmer renders with start and end colors',
+    testWidgets('Blinker.fade renders with start and end colors',
         (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Blinker.shimmer(
+          home: Blinker.fade(
             startColor: Colors.red,
             endColor: Colors.blue,
-            child: const Text('Shimmer Test'),
+            child: const Text('Fade Test'),
           ),
         ),
       );
 
-      // Expect a Text widget is present
-      expect(find.text('Shimmer Test'), findsOneWidget);
+      expect(find.text('Fade Test'), findsOneWidget);
     });
 
     testWidgets('Blinker.cycle renders with a list of colors',
@@ -34,27 +33,23 @@ void main() {
       expect(find.text('Cycle Test'), findsOneWidget);
     });
 
-    testWidgets('Shimmer animation changes color over time',
+    testWidgets('Fade animation changes color over time',
         (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Blinker.shimmer(
+          home: Blinker.fade(
             startColor: Colors.red,
             endColor: Colors.blue,
             duration: const Duration(milliseconds: 100),
-            child: const Text('Animating Text'),
+            child: const Text('Animating Fade'),
           ),
         ),
       );
 
-      // Initial pump
       await tester.pump();
-
-      // Let animation run
       await tester.pump(const Duration(milliseconds: 150));
 
-      // The widget should still be there after animation tick
-      expect(find.text('Animating Text'), findsOneWidget);
+      expect(find.text('Animating Fade'), findsOneWidget);
     });
 
     testWidgets('Cycle mode loops through multiple colors',
@@ -75,9 +70,9 @@ void main() {
       expect(find.text('Looping Colors'), findsOneWidget);
     });
 
-    test('Shimmer constructor throws if colors are missing', () {
+    test('Fade constructor throws if colors are missing', () {
       expect(
-        () => Blinker.shimmer(
+        () => Blinker.fade(
           startColor: Colors.red,
           endColor: null as dynamic,
           child: const Text('Invalid'),

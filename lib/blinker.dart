@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-/// A Flutter widget for creating **blinking** or **shimmer-like**
-/// color transitions on any child widget.
+/// A Flutter widget for creating **color transition** or **color cycling**
+/// animations on any child widget.
 ///
 /// This widget supports two modes:
-/// - **Shimmer mode** [Blinker.shimmer]: Blinks between a start color and an end color.
+/// - **Fade mode** [Blinker.fade]: Transitions between a start color and an end color.
 /// - **Cycle mode** [Blinker.cycle]: Cycles smoothly through a list of colors.
 ///
 /// Works on **all Flutter-supported platforms** (Android, iOS, Web, Windows, macOS, Linux)
@@ -15,15 +15,15 @@ import 'package:flutter/material.dart';
 /// - [AnimationController](https://api.flutter.dev/flutter/animation/AnimationController-class.html)
 /// - [ColorTween](https://api.flutter.dev/flutter/animation/ColorTween-class.html)
 class Blinker extends StatefulWidget {
-  /// Creates a shimmer-like effect between a start color and an end color.
+  /// Creates a fade transition between a start color and an end color.
   ///
-  /// The `startColor` and `endColor` must both be provided.
-  /// This mode is useful for a loading shimmer effect or a blinking text highlight.
-  const Blinker.shimmer({
+  /// The [startColor] and [endColor] must both be provided.
+  /// This mode is useful for a simple blinking effect or highlighting a widget.
+  const Blinker.fade({
     super.key,
-    required this.child,
     required this.startColor,
     required this.endColor,
+    required this.child,
     this.duration = const Duration(milliseconds: 800),
     this.curve = Curves.linear,
     this.times,
@@ -35,12 +35,12 @@ class Blinker extends StatefulWidget {
 
   /// Creates a cycle effect through a list of colors.
   ///
-  /// The [Blinker.colors] list must have at least **two** colors.
+  /// The [colors] list must have at least **two** colors.
   /// The widget will smoothly transition from one color to the next.
   const Blinker.cycle({
     super.key,
-    required this.child,
     required this.colors,
+    required this.child,
     this.duration = const Duration(milliseconds: 800),
     this.curve = Curves.linear,
     this.times,
@@ -54,10 +54,10 @@ class Blinker extends StatefulWidget {
   /// The widget to which the blinking effect will be applied.
   final Widget child;
 
-  /// Start color for shimmer effect (used in shimmer mode only [Blinker.shimmer]).
+  /// Start color for fade effect (used in fade mode only [Blinker.fade]).
   final Color? startColor;
 
-  /// End color for shimmer effect (used in shimmer mode only [Blinker.shimmer]).
+  /// End color for fade effect (used in fade mode only [Blinker.fade]).
   final Color? endColor;
 
   /// List of colors to cycle through (used in cycle mode only [Blinker.cycle]).
@@ -74,8 +74,8 @@ class Blinker extends StatefulWidget {
   /// If `null`, animation repeats infinitely.
   ///
   /// If times is set, the animation will stop after completing the specified number of cycles,
-  /// and final color will be the first color in the [Blinker.cycle],
-  /// and final color will be the start color in shimmer mode [Blinker.shimmer].
+  /// and final color will be the first color in [Blinker.cycle],
+  /// or the start color in fade mode [Blinker.fade].
   final int? times;
 
   @override
@@ -83,11 +83,11 @@ class Blinker extends StatefulWidget {
 }
 
 class BlinkerState extends State<Blinker> with SingleTickerProviderStateMixin {
-  late AnimationController _controller; // Controls the animation timing.
-  late Animation<Color?> _colorAnimation; // Produces color values over time.
-  int _currentColorIndex = 0; // Tracks the current color in the sequence.
-  int _cycleCount = 0; // Counts completed full cycles.
-  late List<Color> colors; // Final list of colors to animate between.
+  late AnimationController _controller; // Controls the animation timing
+  late Animation<Color?> _colorAnimation; // Produces color values over time
+  int _currentColorIndex = 0; // Tracks the current color in the sequence
+  int _cycleCount = 0; // Counts completed full cycles
+  late List<Color> colors; // Final list of colors to animate between
 
   @override
   void initState() {
