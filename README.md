@@ -22,6 +22,45 @@ A sleek, customizable Flutter widget for **fade transitions** and **color cyclin
 
 ---
 
+## 💡 Usage
+
+### Fade Mode
+
+```dart
+Blinker.fade(
+  startColor: Colors.grey.shade300,
+  endColor: Colors.grey.shade100,
+  duration: const Duration(milliseconds: 800),
+  curve: Curves.easeInOut,
+  times: null, // Infinite loop
+  child: Container(
+    width: 150,
+    height: 40,
+    color: Colors.grey.shade300,
+  ),
+)
+
+### Cycle Mode
+
+```dart
+Blinker.cycle(
+  colors: [
+    Colors.red,
+    Colors.green,
+    Colors.blue,
+    Colors.yellow,
+  ],
+  duration: const Duration(milliseconds: 800),
+  curve: Curves.easeInOut,
+  times: null, // Infinite loop
+  child: Container(
+    width: 150,
+    height: 40,
+    color: Colors.grey.shade300,
+  ),
+)
+
+
 ## 🚀 Getting Started
 
 Add **blinker** to your project:
