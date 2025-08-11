@@ -18,10 +18,6 @@ A sleek, customizable Flutter widget for **fade transitions** and **color cyclin
 
 | Loading List | Rating | TImer |
 |------------------|--------------------|------------------|
-<p>
-    <img src="https://github.com/AbdullahProjects/blinker/blob/main/screenshots/loading_list.gif)"/>
-    <img src="https://github.com/AbdullahProjects/blinker/blob/main/screenshots/rating.gif"/>
-</p>
 | ![Loading List](https://github.com/AbdullahProjects/blinker/blob/main/screenshots/loading_list.gif) | ![Rating](https://github.com/AbdullahProjects/blinker/blob/main/screenshots/rating.gif) | ![Timer](https://github.com/AbdullahProjects/blinker/blob/main/screenshots/timer.gif) |
 
 ---
