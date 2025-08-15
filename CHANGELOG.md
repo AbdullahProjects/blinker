@@ -1,6 +1,8 @@
-## 1.0.0
+## 0.0.3
+* update metadata
 
-- Initial release
-- Added fade mode
-- Added color cycle mode
-- Supports all Flutter platforms
+## 0.0.2
+* update readme file
+
+## 0.0.1
+* Initial release.
