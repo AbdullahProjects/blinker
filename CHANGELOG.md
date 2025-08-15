@@ -1,8 +1,8 @@
-## 0.0.3
+## 1.0.2
 * update metadata
 
-## 0.0.2
+## 1.0.1
 * update readme file
 
-## 0.0.1
+## 1.0.0
 * Initial release.
