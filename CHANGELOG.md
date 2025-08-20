@@ -1,3 +1,6 @@
+## 1.0.3
+* update readme file and meta-data
+
 ## 1.0.2
 * update metadata
 

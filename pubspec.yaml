@@ -1,8 +1,8 @@
 name: blinker
 description: >
-  A Flutter widget for blinking or fade-like color transitions on any widget.
+  Flutter package for blinking or fade-like color transitions on any widget.
   Supports fade effect between two colors or cycling through multiple colors. All platforms support.
-version: 1.0.2
+version: 1.0.3
 homepage: https://github.com/AbdullahProjects/blinker
 repository: https://github.com/AbdullahProjects/blinker
 issue_tracker: https://github.com/AbdullahProjects/blinker/issues
