@@ -1,6 +1,6 @@
 # Blinker
 
-[![pub package](https://img.shields.io/pub/v/fade_shimmer.svg)](https://pub.dev/packages/blinker)
+[![pub package](https://img.shields.io/pub/v/blinker.svg)](https://pub.dev/packages/blinker)
 [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 ![GitHub stars](https://img.shields.io/github/stars/AbdullahProjects/blinker.svg?style=social)
 
